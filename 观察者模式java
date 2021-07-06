@@ -1,0 +1,56 @@
+一、观察者模式介绍
+在Java中通过Observable类和Observer接口实现了观察者模式。一个Observer对象监视着一个Observable对象的变化，当Observable对象发生变化时，Observer得到通知，就可以进行相应的工作。
+如果画面A是显示数据库里面的数据，而画面B修改了数据库里面的数据，那么这时候画面A就要重新Load。这时候就可以用到观察者模式
+
+import java.util.Observable;    
+/** 
+ * 被观察者类 
+ */      
+public class SimpleObservable extends Observable    
+{    
+   private int data = 0;    
+      
+   public int getData(){     
+       return data;    
+   }    
+      
+   public void setData(int i){    
+       if(this.data != i) {   
+          this.data = i;   
+          setChanged();    
+  
+          //只有在setChange()被调用后，notifyObservers()才会去调用update()，否则什么都不干。   
+          notifyObservers();      
+       }    
+   }    
+} 
+
+/** 
+ * 观察者类 
+ */        
+public class SimpleObserver implements Observer    
+{    
+   public SimpleObserver(SimpleObservable simpleObservable){    
+      simpleObservable.addObserver(this );    
+   }    
+      
+   public void update(Observable observable ,Object data){  // data为任意对象，用于传递参数   
+      System.out.println(“Data has changed to” + (SimpleObservable)observable.getData());    
+   }    
+} 
+测试类
+public class SimpleTest    
+{    
+   public static void main(String[] args){    
+      SimpleObservable doc = new SimpleObservable ();    
+      SimpleObserver view = new SimpleObserver (doc);    
+      doc.setData(1);    
+      doc.setData(2);    
+      doc.setData(2);    
+      doc.setData(3);     
+   }    
+} 
+运行结果如下
+Data has changed to 1   
+Data has changed to 2  //第二次setData(2)时由于没有setChange，所以update没被调用  
+Data has changed to 3 
