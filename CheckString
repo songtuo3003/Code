@@ -1,0 +1,40 @@
+package cn.monitor4all.miaoshadao.dao;
+
+
+import java.util.Scanner;
+
+//输入实例 8avc456qw   118avc456qw11  8a0vc456qw
+public class CheckString {
+    static int count = 0;
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String s = sc.nextLine();
+        check(s.toCharArray(), 0);
+        if (count == 0) System.out.println(-1);
+        else System.out.println(count);
+    }
+    public static void check(char[] ch, int start){
+        int n = ch.length;
+        if(start > n) return;
+        if(start == ch.length){
+            count++;
+            return;
+        }
+        int num = 0;
+        int howNum = 0;
+        int cur = start;
+        if(ch[start] > '0' && ch[start] <= '9'){
+            while (cur < n && Character.isDigit(ch[cur])){
+                num *= 10;
+                num += ch[cur] - '0';
+                howNum++;
+                cur++;
+            }
+        }
+        while(num != 0){
+            check(ch, start+ howNum + num);
+            howNum--;
+            num /= 10;
+        }
+    }
+}
