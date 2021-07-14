@@ -1,0 +1,42 @@
+package cn.monitor4all.miaoshadao.dao;
+
+import java.util.Stack;
+
+public class RepeatString {
+    public static void main(String[] args) {
+        String str = "(ab)<2>c((d)<2>f)<2>e";
+        String solution = solution(str);
+        System.out.println(solution);
+    }
+    // a(d(b)<3>c)<2>    (ab)<2>c((d)<2>f)<2>e
+    public static String solution(String str){
+        Stack<String> st = new Stack<>();
+        StringBuilder cur = new StringBuilder();
+        for(int i = 0; i < str.length(); i++){
+            char c = str.charAt(i);
+            if(c == '('){
+                st.push(cur.toString());
+                cur.setLength(0);
+            }else if(c == ')'){
+                int num = 0;
+                int count = 0;
+                i += 2;
+                while(str.charAt(i) != '>'){
+                    num *= 10;
+                    num += str.charAt(i) - '0';
+                    count++;
+                    i++;
+                }
+                String temp = cur.toString();
+                for(int k = 0; k < num-1; k++){
+                    cur.append(temp);
+                }
+                String pop = st.pop();
+                cur.insert(0,pop);
+            }else{
+                cur.append(c);
+            }
+        }
+        return cur.toString();
+    }
+}
