@@ -1,0 +1,200 @@
+# 专业级
+
+## 题目一
+
+### 题目描述
+
+请你设计一个租房系统。支持以下几个函数
+
+1. 向系统中加入房号为id的房子:`boolean addRoom(int id, int area, int price, int rooms, int[] address)`
+
+`id`:房间编号，`area`：房间面积，`price`：房间租金，`rooms`：房间对应数量，`address`:房间平面坐标(x坐标，y坐标；长度为2)
+
+执行addRoom操作：
+
+- 若租房系统中已经存在房号为id的房间，则更新该房间的信息为新加入的信息，同时返回false
+- 若租房系统中已经不存在房号为id的房间，则更新该房间的信息为新加入的信息，同时返回true
+
+
+2. 从系统中移除房号为id的房子:`boolean deleteRoom(int id)`
+
+- 若租房系统中已经存在房号为id的房间，则将该房间从系统移除，返回`true`
+- 若租房系统中不存在房号为id的房间，返回`false`
+
+3. 查询满足指定规则的房间:`int[] queryRoom(int area, int price, int rooms, int[] address, int[][] orderBy)`
+
+查询规则：
+
+找出当前租房系统中房间面积大于等于`area`，租金小于等于`price`，房间数量等于`rooms`的房间，将这些房间按照`orderBy`指定的规则进行升序或者降序排列。
+
+`orderBy`的每一个元素为(`parameter`,`order`)，其中`parameter`可能取值为`1`（按照面积排序），`2`(按照租金排序)，`3`(曼哈顿距离排序)
+
+`order`可能的取值`1`（升序排列），`-1`（降序排列）。
+
+曼哈顿距离：|x1-x2|+|y1-y2|
+
+例如：orderBy=\[\[3,1\],\[2,-1\]\]表示先按照曼哈顿距离升序排序，排序后，如果距离相同，再按照租金降序排序。
+
+### 测试用例
+
+**输入：**
+
+```txt
+["RentingSystem","addRoom","addRoom","queryRoom","deleteRoom"]
+[[],[3,24,200,2,[0,1]],[1,10,400,2,[1,0]],[1,400,2,[1,1],[[3,1],[2,-1]]],[3]]
+```
+
+**输出：**
+
+```txt
+[null,true,true,[1,3],true]
+```
+
+### 函数原型
+
+【Java】
+
+```java
+public class RentingSystem{
+    public RentingSystem() {
+
+    }
+
+    public boolean addRoom(int id, int area, int price, int rooms, int[] address) {
+
+    }
+
+    public boolean deleteRoom(int id) {
+
+    }
+
+    public int[] queryRoom(int area, int price, int rooms, int[] address, int[][] orderBy) {
+
+    }
+}
+```
+
+【C++】
+
+```c++
+class RentingSystem {
+
+public:
+
+    RentingSystem()
+    {
+
+    }
+
+    bool AddRoom(int id, int area, int price, int rooms, const vector<int>& address)
+    {
+
+    }
+
+    bool DeleteRoom(int id)
+    {
+
+    }
+
+    vector<int> QueryRoom(int area, int price, int rooms, const vector<int>& address, const vector<vector<int>>& orderBy)
+    {
+    
+    }
+}
+```
+
+### 参考
+
+[该题目已案例开放](http://3ms.huawei.com/km/groups/3803117/blogs/details/10397189)
+
+## 题目二
+
+### 题目描述
+
+给你一个二叉树，每个节点有一个值（可能重复），现在对这个二叉树进行标记，从根节点到叶子节点组成的路径里，如果存在一个节点，使得由该节点分割的上游路径和下游路径上节点的值的和相等，则标记该节点。
+
+求这个二叉树没有被标记的节点的值的总和。
+
+### 示例
+
+**示例1：**
+
+```txt
+          4
+         /
+       [1]
+      /  \
+    [4]   4
+   /   \
+  2    [1]
+ /       \
+3         9
+```
+
+如上图所示，方括号为被标记的节点，节点所在的路径的两部分的和刚好相等，最终结果为 4 + 4 + 2 + 3 + 9 = 22
+
+### 函数原型
+
+【Java】
+
+```java
+/*
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public int bisectTreePath(TreeNode root) {
+}
+```
+[该题目参考](http://xinsheng.huawei.com/cn/index.php?app=forum&mod=Detail&act=index&id=5750895)
+
+## 题目三
+
+### 题目描述
+
+有一个 `M*N` 的矩形，矩形的每个点放置着数量不等的传感器，将边为`cnt`的正方形视为一个区域，找出包含传感器数量最多的区域，返回部署的传感器数量的类型的个数。
+
+### 示例
+
+```txt
+|1|1|5|
+|2|1|1|
+|4|1|3|
+```
+
+`cnt` = 2，可以组成以下几个区域：
+
+```txt
+a. |1|1|  b. |1|5|  c. |2|1|  d. |1|1|
+   |2|1|     |1|1|     |4|1|     |1|3|
+```
+
+其中，包含传感器的总数量，a=5，b=8，c=8，d=6，b和c是最多的。
+
+在b和c中部署的传感器数量的类型有 1,2,4,5，总共4种，所以返回4。
+
+
+再例如如下数组
+
+```txt
+|3|2|2|3|1|
+|4|2|3|3|0|
+|3|3|2|1|1|
+|3|3|4|3|1|
+```
+
+cnt = 2，返回结果3
+
+### 函数原型
+
+【Java】
+
+```java
+public int sensorsNumCategory(int[][] sensors, int cnt) {
+
+}
+```
