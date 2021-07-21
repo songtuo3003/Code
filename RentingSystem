@@ -1,0 +1,117 @@
+package cn.monitor4all.miaoshadao.dao;
+
+import java.util.*;
+
+public class RentingSystem{
+    Map<Integer, Room> map;
+    public static void main(String[] args) {
+        RentingSystem sys = new RentingSystem();
+        System.out.println("add :"+sys.addRoom(3,24,200,2, new int[]{0,1}));;
+        System.out.println("add :"+sys.addRoom(1,10,400,2,new int[]{1,0}));;
+        System.out.println("add :"+sys.addRoom(1,10,400,2,new int[]{2,0}));;
+        int[][] query = new int[2][2];
+        query[0] = new int[]{3,1};
+        query[1] = new int[]{2,-1};
+        int[] ints = sys.queryRoom(1, 400, 2, new int[]{1, 1}, query);
+        System.out.println(Arrays.toString(ints));
+        System.out.println("delete : "+ sys.deleteRoom(3));
+        System.out.println("delete : "+ sys.deleteRoom(3));
+        for (Map.Entry<Integer, Room> entry : sys.map.entrySet()) {
+            System.out.println(entry.getValue().toString());
+        };
+    }
+    public RentingSystem() {
+        map = new HashMap<>();
+    }
+
+    public boolean addRoom(int id, int area, int price, int rooms, int[] address) {
+        if(map.containsKey(id)){
+            map.put(id, new Room(id,area,price,rooms,address));
+            return false;
+        }else{
+            map.put(id, new Room(id,area,price,rooms,address));
+            return true;
+        }
+    }
+
+    public boolean deleteRoom(int id) {
+        if(map.containsKey(id)){
+            map.remove(id);
+            return true;
+        }
+        return false;
+    }
+
+    public int[] queryRoom(int area, int price, int rooms, int[] address, int[][] orderBy) {
+        Iterator<Map.Entry<Integer, Room>> iterator = map.entrySet().iterator();
+        List<Room> list = new ArrayList<>();
+        while (iterator.hasNext()){
+            Map.Entry<Integer, Room> next = iterator.next();
+            if(judge(next.getValue(), area, price, rooms)){
+                list.add(next.getValue());
+            }
+        }
+        Collections.sort(list, new Comparator<Room>() {
+            @Override
+            public int compare(Room o1, Room o2) {
+                for(int[] temp : orderBy){
+                    int res = allSort(o1, o2, temp[0]);
+                    if(res == 0){
+                        continue;
+                    }
+                    return res * temp[1];
+                }
+                return 0;
+            }
+        });
+        int[] result = new int[list.size()];
+        for(int i = 0; i < list.size(); i++){
+            result[i] = list.get(i).id;
+        }
+        return result;
+    }
+    private int allSort(Room o1, Room o2, int num){
+        if(num == 1){
+            return o1.area - o2.area;
+        }else if(num == 2){
+            return o1.price - o2.price;
+        }else{
+            return Math.abs(o1.address[0] - o2.address[0]) + Math.abs(o1.address[1] - o2.address[1]);
+        }
+    }
+
+    private boolean judge(Room r, int area, int price, int rooms){
+        if(r.area >= area && r.price <= price && r.rooms == rooms){
+            return true;
+        }
+        return false;
+    }
+
+    class Room{
+        int id;
+
+        @Override
+        public String toString() {
+            return "Room{" +
+                    "id=" + id +
+                    ", area=" + area +
+                    ", price=" + price +
+                    ", rooms=" + rooms +
+                    ", address=" + Arrays.toString(address) +
+                    '}';
+        }
+
+        int area;
+        int price;
+        int rooms;
+        int[] address;
+        public Room(int id, int area, int price, int rooms, int[] address){
+            this.id = id;
+            this.area = area;
+            this.price = price;
+            this.rooms = rooms;
+            this.address = address;
+        }
+
+    }
+}
